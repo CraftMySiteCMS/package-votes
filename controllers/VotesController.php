@@ -2,11 +2,13 @@
 namespace CMS\Controller\Votes;
 
 use CMS\Controller\coreController;
+use CMS\Controller\Menus\menusController;
 use CMS\Controller\users\usersController;
 use CMS\Model\votes\sitesModel;
 use CMS\Model\votes\configModel;
 use CMS\Model\votes\rewardsModel;
 use CMS\Model\users\usersModel;
+use CMS\Model\Votes\votesModel;
 
 
 /**
@@ -173,8 +175,25 @@ class votesController extends coreController
 
 
     /* //////////////////////////////////////////////////////////////*/
-    /* ///////////////////// PARTIE FRONT THEME /////////////////////*/
+    /* ///////////////////// PUBLIC VOTE SECTION ////////////////////*/
     /* //////////////////////////////////////////////////////////////*/
+
+    public function votesPublic(){
+        //Default controllers (important)
+        $core = new coreController();
+        $menu = new menusController();
+
+        $vote = new votesModel();
+
+        /* TEST SECTION */
+        $vote->ipPlayer = "MY IP";
+        $vote->websiteId = "123";
+
+        $vote->check("https://www.serveursminecraft.org/serveur/123/");
+
+        //Include the public view file ("public/themes/$themePath/views/votes/main.view.php")
+        view('votes', 'main', ["votes" => $vote, "core" => $core, "menu" => $menu], 'public');
+    }
 
 
 

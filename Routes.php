@@ -7,10 +7,6 @@ require_once('Lang/'.getenv("LOCALE").'.php');
 
 /** @var $router Router Main router */
 
-/* Fronts pages of CMS */
-$router->scope('/votes', function($router) {
-    $router->get('/', "votes#votesConfiguration");
-});
 
 /* Administration scope of package */
 $router->scope('/cms-admin/', function($router) {
@@ -32,5 +28,9 @@ $router->scope('/cms-admin/', function($router) {
     $router->get('votes/rewards', 'votes#votesRewards');
 
 
+});
 
+/* PUBLIC PAGE */
+$router->scope('/voter', function($router) {
+    $router->get('/', "votes#votesPublic");
 });

@@ -38,7 +38,7 @@ ob_start();
                                             <div class="card-body">
                                                 <form action="" method="post" >
 
-                                                    <input type="text" name="siteId" value="<?= $votes['id'] ?>" hidden ?>
+                                                    <input type="text" name="siteId" value="<?= $votes['id'] ?>" hidden>
 
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
