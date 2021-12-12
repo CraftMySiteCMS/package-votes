@@ -55,6 +55,10 @@ class votesController extends coreController
 
         $votes->update();
 
+        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
+        $_SESSION['toaster'][0]['type'] = "bg-success";
+        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_EDIT_SUCCESS;
+
         header('location: ../votes/config/');
     }
 

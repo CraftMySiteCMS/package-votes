@@ -21,7 +21,7 @@ class configModel extends manager {
     public int $topShow;
     public int $reset;
     public int $autoTopRewardActive;
-    public string $autoTopReward;
+    public ?string $autoTopReward;
 
 
 

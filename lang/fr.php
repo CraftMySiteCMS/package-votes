@@ -44,3 +44,11 @@ const VOTES_DASHBOARD_ADD_PLACEHOLDER_TOPSHOW = "Sélection du nombre de joueurs
 
 /* Récompenses */
 const VOTES_DASHBOARD_TITLE_REWARDS = "Votes - Récompenses";
+
+
+/* Toasts */
+const VOTES_TOAST_TITLE_SUCCESS = "Information";
+const VOTES_TOAST_TITLE_ERROR = "Erreur";
+const VOTES_TOAST_TITLE_WARNING = "Attention";
+
+const VOTES_TOAST_EDIT_SUCCESS = "Modification effectuée";
