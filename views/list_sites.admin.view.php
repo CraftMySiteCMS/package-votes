@@ -1,10 +1,10 @@
 <?php
-use CMS\Model\Votes\rewardsModel;
 $title = VOTES_DASHBOARD_TITLE_LISTE_SITES;
 $description = VOTES_DASHBOARD_DESC;
 
 ob_start();
 /** @var rewardsModel[] $rewards */
+/** @var sitesModel[] $votesList */
 ?>
 
 
@@ -80,7 +80,7 @@ ob_start();
                                                         <label><?= VOTES_DASHBOARD_ADD_PLACEHOLDER_REWARDS ?></label>
                                                         <select name="reward" class="form-control"  required>
                                                             <?php foreach ($rewards as $reward) : ?>
-                                                                <option value="<?= $reward['rewards_id'] ?>" <?= ($votes->rewardsId === $votes['rewards_id'] ? "selected" : "") ?>><?= $reward['title'] ?></option>
+                                                                <option value="<?= $reward['rewards_id'] ?>" <?= ($votes['rewards_id'] === $reward['rewards_id'] ? "selected" : "") ?>><?= $reward['title'] ?></option>
                                                             <?php endforeach; ?>
                                                         </select>
 

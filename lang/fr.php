@@ -52,3 +52,5 @@ const VOTES_TOAST_TITLE_ERROR = "Erreur";
 const VOTES_TOAST_TITLE_WARNING = "Attention";
 
 const VOTES_TOAST_EDIT_SUCCESS = "Modification effectuée";
+const VOTES_TOAST_ADD_SUCCESS = "Ajouts effectué";
+const VOTES_TOAST_DELETE_SUCCESS = "Suppression effectuée";
