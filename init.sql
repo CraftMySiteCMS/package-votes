@@ -3,7 +3,7 @@ CREATE TABLE if not exists `cms_votes_sites`(
     `title` VARCHAR(255) NOT NULL ,
     `url` VARCHAR(255) NOT NULL ,
     `time` INT(10) UNSIGNED NOT NULL ,
-    `id_unique` VARCHAR(10) NOT NULL ,
+    `id_unique` VARCHAR(255) NOT NULL ,
     `rewards_id` INT(11) NULL ,
     `date_create` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
 PRIMARY KEY (`id`)

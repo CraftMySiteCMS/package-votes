@@ -43,6 +43,13 @@ ob_start();
                                 </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-link"></i></span>
+                                    </div>
+                                    <input type="url" name="url" id="url" class="form-control"
+                                           placeholder="<?= VOTES_DASHBOARD_ADD_PLACEHOLDER_URL ?>" required>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-fingerprint"></i></span>
                                     </div>
                                     <input type="text" name="idUnique" id="idUnique" class="form-control"
@@ -50,13 +57,6 @@ ob_start();
                                     <div class="input-group-prepend">
                                         <button type="button" onclick="testId();" class="btn btn-success"><?= VOTES_DASHBOARD_ADD_BTN_TESTID ?></button>
                                     </div>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-link"></i></span>
-                                    </div>
-                                    <input type="url" name="url" id="url" class="form-control"
-                                           placeholder="<?= VOTES_DASHBOARD_ADD_PLACEHOLDER_URL ?>" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="reward"><?= VOTES_DASHBOARD_ADD_PLACEHOLDER_REWARDS ?></label>
@@ -110,6 +110,11 @@ ob_start();
                 </div>
 
                 <div class="modal-footer">
+
+                    <a href="https://github.com/CraftMySiteCMS/package-votes/issues/new/choose" class="btn btn-primary"
+                       target="_blank">Demande d'ajouts de nouveaux sites
+                    </a>
+
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= VOTES_DASHBOARD_BTN_CLOSE ?></button>
                 </div>
             </div>

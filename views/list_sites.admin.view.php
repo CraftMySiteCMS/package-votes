@@ -5,6 +5,10 @@ $description = VOTES_DASHBOARD_DESC;
 ob_start();
 /** @var rewardsModel[] $rewards */
 /** @var sitesModel[] $votesList */
+
+//Javascript file for testing the unique Id + toaster sweetalert2
+$scripts= '<script src="'.getenv("PATH_SUBFOLDER").'app/package/votes/views/ressources/js/testSitesId.js"></script>
+<script src="'.getenv("PATH_SUBFOLDER").'admin/resources/vendors/sweetalert2/sweetalert2.all.js"></script>';
 ?>
 
 
@@ -60,21 +64,24 @@ ob_start();
                                                     </div>
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i class="fas fa-fingerprint"></i></span>
+                                                            <span class="input-group-text"><i class="fas fa-link"></i></span>
                                                         </div>
-                                                        <input type="text" name="idUnique" class="form-control"
-                                                               placeholder="<?= VOTES_DASHBOARD_ADD_PLACEHOLDER_ID_UNIQUE ?>"
-                                                               value="<?= $votes['id_unique'] ?>"
+                                                        <input type="url" name="url" id="url" class="form-control"
+                                                               placeholder="<?= VOTES_DASHBOARD_ADD_PLACEHOLDER_URL ?>"
+                                                               value="<?= $votes['url'] ?>"
                                                                required>
                                                     </div>
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i class="fas fa-link"></i></span>
+                                                            <span class="input-group-text"><i class="fas fa-fingerprint"></i></span>
                                                         </div>
-                                                        <input type="url" name="url" class="form-control"
-                                                               placeholder="<?= VOTES_DASHBOARD_ADD_PLACEHOLDER_URL ?>"
-                                                               value="<?= $votes['url'] ?>"
+                                                        <input type="text" name="idUnique" id="idUnique" class="form-control"
+                                                               placeholder="<?= VOTES_DASHBOARD_ADD_PLACEHOLDER_ID_UNIQUE ?>"
+                                                               value="<?= $votes['id_unique'] ?>"
                                                                required>
+                                                        <div class="input-group-prepend">
+                                                            <button type="button" onclick="testId();" class="btn btn-success"><?= VOTES_DASHBOARD_ADD_BTN_TESTID ?></button>
+                                                        </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label><?= VOTES_DASHBOARD_ADD_PLACEHOLDER_REWARDS ?></label>
