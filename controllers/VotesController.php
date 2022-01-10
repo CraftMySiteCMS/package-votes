@@ -189,18 +189,6 @@ class votesController extends coreController
         $sites = new sitesModel();
         $sites = $sites->fetchAll();
 
-        /* CHECK VOTES -- TEST */
-
-        //$vote->ipPlayer = "82.120.122.106"; //todo get l'ip de l'utilisateur
-
-        //$vote->getSite();
-
-        //$vote->check("https://www.serveursminecraft.org/serveur/123/");
-
-
-
-
-
         //Include the public view file ("public/themes/$themePath/views/votes/main.view.php")
         view('votes', 'main', ["votes" => $vote, "sites" => $sites,
             "core" => $core, "menu" => $menu], 'public');
