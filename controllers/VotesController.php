@@ -219,20 +219,6 @@ class votesController extends coreController
         }
 
 
-        /*
-        $attempt = 0;
-        while ($vote->check($url) == true){
-
-            $vote->check($vote->idUnique);
-
-            echo "Tentative n°".$attempt;
-            sleep(5);
-
-            $attempt++;
-        }
-*/
-
-
     }
 
 
