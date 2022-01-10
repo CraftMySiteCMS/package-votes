@@ -31,6 +31,9 @@ $router->scope('/cms-admin/', function($router) {
 });
 
 /* PUBLIC PAGE */
-$router->scope('/voter', function($router) {
+$router->scope('/vote', function($router) {
     $router->get('/', "votes#votesPublic");
+    $router->post('/', "votes#votesPublic");
+
+    $router->post('/verify', "votes#votesPublicVerify");
 });

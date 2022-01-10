@@ -4,6 +4,7 @@ namespace CMS\Controller\Votes;
 use CMS\Controller\coreController;
 use CMS\Controller\Menus\menusController;
 use CMS\Controller\users\usersController;
+use CMS\Model\Votes\checkVotesModel;
 use CMS\Model\votes\sitesModel;
 use CMS\Model\votes\configModel;
 use CMS\Model\votes\rewardsModel;
@@ -185,14 +186,60 @@ class votesController extends coreController
 
         $vote = new votesModel();
 
-        /* TEST SECTION */
-        $vote->ipPlayer = "MY IP";
-        $vote->websiteId = "123";
+        $sites = new sitesModel();
+        $sites = $sites->fetchAll();
 
-        $vote->check("https://www.serveursminecraft.org/serveur/123/");
+        /* CHECK VOTES -- TEST */
+
+        //$vote->ipPlayer = "82.120.122.106"; //todo get l'ip de l'utilisateur
+
+        //$vote->getSite();
+
+        //$vote->check("https://www.serveursminecraft.org/serveur/123/");
+
+
+
+
 
         //Include the public view file ("public/themes/$themePath/views/votes/main.view.php")
-        view('votes', 'main', ["votes" => $vote, "core" => $core, "menu" => $menu], 'public');
+        view('votes', 'main', ["votes" => $vote, "sites" => $sites,
+            "core" => $core, "menu" => $menu], 'public');
+    }
+
+    public function votesPublicVerify(){
+        $vote = new votesModel();
+
+        $url = filter_input(INPUT_POST, "url");
+
+        $site = $vote->getSite($url);
+        $vote->idUnique = $site['id_unique'];
+
+        echo $vote->idUnique;
+
+
+        $vote->ipPlayer = ""; //todo get l'ip de l'utilisateur
+
+        if ($vote->check($url) == true){
+            echo "Vote validé";//give reward
+        } else{
+            echo "Vote non validé";//retry
+        }
+
+
+        /*
+        $attempt = 0;
+        while ($vote->check($url) == true){
+
+            $vote->check($vote->idUnique);
+
+            echo "Tentative n°".$attempt;
+            sleep(5);
+
+            $attempt++;
+        }
+*/
+
+
     }
 
 

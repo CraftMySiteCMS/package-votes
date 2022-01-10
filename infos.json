@@ -9,7 +9,8 @@
     "Liste des sites": "votes/site/list",
     "Récompenses": "votes/rewards",
     "Top voteurs": "votes/top/",
-    "Muliplicateur de votes": "votes/boost/"
+    "Muliplicateur de votes": "votes/boost/",
+    "VoteShop": "votes/voteshop"
   },
   "description": "Intégrez un système de votes complet pour votre site.",
   "version": "1.0.0",
