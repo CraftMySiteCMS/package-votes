@@ -1,9 +1,9 @@
-$(document).ready(function (){
+$(document).ready(function () {
 
     listener();
 
-    function listener(){
-        $('[name="btnVote"]').click(function (){
+    function listener() {
+        $('[name="btnVote"]').click(function () {
             let urlSite = $(this).val();
             verify(urlSite);
 
@@ -11,7 +11,7 @@ $(document).ready(function (){
         })
     }
 
-    function verify(url){
+    function verify(url) {
         console.log("Start verification for url " + url);
 
         //Request
@@ -21,20 +21,18 @@ $(document).ready(function (){
             data: {
                 "url": url
             },
-            error: false
-        }).done(function (data){
-            console.log("good");
-            console.log(data)
+            success: function (response) {
+                console.log("success");
+                console.log(response)
 
-            //Change the current button
-            $('[name="btnVote"]').text("Vérification en cours").attr("disabled", true)
-                .append('<i class="fa fa-spinner fa-spin" style="font-size:14px; margin-left: 10px"></i>');
+                //Change the current button
+                $('[name="btnVote"]').text("Vérification en cours").attr("disabled", true)
+                    .append('<i class="fa fa-spinner fa-spin" style="font-size:14px; margin-left: 10px"></i>');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
 
-        }).fail(function (data){
-            console.log("fail");
-            console.log(data);
-
-            let reason = data.responseJSON.reason;
         })
     }
 })
