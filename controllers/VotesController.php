@@ -195,6 +195,14 @@ class votesController extends coreController
     }
 
     public function votesPublicVerify(){
+        /* Error section */
+        $errors = array();
+
+        if (empty(filter_input(INPUT_POST, "url"))){
+            $errors['name'] = "Url is null";
+        }
+
+
         $vote = new votesModel();
 
         $url = filter_input(INPUT_POST, "url");
@@ -202,15 +210,12 @@ class votesController extends coreController
         $site = $vote->getSite($url);
         $vote->idUnique = $site['id_unique'];
 
-        echo $vote->idUnique;
-
-
         $vote->ipPlayer = ""; //todo get l'ip de l'utilisateur
 
         if ($vote->check($url) == true){
-            echo "Vote validé";//give reward
+            echo "GOOD";//give reward
         } else{
-            echo "Vote non validé";//retry
+            echo "NOT_CONFIRMED";//retry
         }
 
 
