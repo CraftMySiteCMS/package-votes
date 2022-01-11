@@ -19,19 +19,23 @@ $(document).ready(function () {
             type: "POST",
             url: "vote/verify",
             async: true,
+            dataType: "html",
             data: {
                 "url": url
             },
             success: function (response) {
+
+                var jsonData = JSON.parse(response);
+
                 console.log("success, response: " + response);
 
-                if (response === "GOOD"){
+                if (jsonData.response === "GOOD" || jsonData.response === "GOOD-NEW_VOTE" || jsonData.response === "ALREADY_VOTE"){
                     //Reset vote button
                     $('[name="btnVote"]').text("Voter").attr("disabled", false);
                 }
 
                 //Verif -> 3 sec
-                if (response === "NOT_CONFIRMED"){
+                if (jsonData.response === "NOT_CONFIRMED"){
                     setTimeout(function (){
                        verify(url);
                     }, 3000); // 3sec

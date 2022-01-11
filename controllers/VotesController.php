@@ -204,18 +204,50 @@ class votesController extends coreController
 
 
         $vote = new votesModel();
+        $user = new usersModel();
+
 
         $url = filter_input(INPUT_POST, "url");
 
         $site = $vote->getSite($url);
         $vote->idUnique = $site['id_unique'];
+        $vote->idSite = $site['id'];
 
-        $vote->ipPlayer = ""; //todo get l'ip de l'utilisateur
+        $vote->ipPlayer = "";
+        //$vote->getClientIp(); todo get l'ip de l'utilisateur
+
+        //Get user id
+        $user->fetch($_SESSION['cmsUserId']);
+        $vote->idUser = $user->userId;
+
 
         if ($vote->check($url) == true){
-            echo "GOOD";//give reward
-        } else{
-            echo "NOT_CONFIRMED";//retry
+
+            if ($vote->hasVoted() === "NEW_VOTE"){
+
+                //Store the vote
+                $vote->storeVote();
+                //Get reward
+
+                echo json_encode(array("response" =>"GOOD-NEW_VOTE"));
+            }else{
+                //If the player has already vote
+                if ($vote->hasVoted()){
+
+                    echo json_encode(array("response" =>"ALREADY_VOTE"));
+
+                }else{
+                    //Store the vote
+                    $vote->storeVote();
+
+                    //Get reward
+
+                    echo json_encode(array("response" =>"GOOD"));
+                }
+            }
+
+        } else{//retry
+            echo json_encode(array("response" =>"NOT_CONFIRMED"));
         }
 
 

@@ -24,7 +24,8 @@ class votesModel extends manager{
     public string $dateCreate;
 
 
-    public int $idPlayer;
+    public int $idSite;
+    public int $idUser;
     public string $pseudo;
     public string $ipPlayer;
 
@@ -48,6 +49,87 @@ class votesModel extends manager{
         return [];
     }
 
+    public function storeVote(): void
+    {
+        $var = array(
+            "id_user" => $this->idUser,
+            "ip" => $this->ipPlayer,
+            "id_site" => $this->idSite
+        );
+
+        $sql = "INSERT INTO cms_votes_votes (id_user, ip, id_site) VALUES (:id_user, :ip, :id_site)";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+        $req->execute($var);
+    }
+
+    public function hasVoted(){
+        //Check if the player has already vote for the website id
+        $var = array(
+            "id_user" => $this->idUser,
+            "id_site" => $this->idSite
+        );
+
+        $sql = "SELECT * FROM cms_votes_votes WHERE id_user = :id_user AND id_site = :id_site";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if ($req->execute($var)){
+            $lines =  $req->fetchAll();
+
+            if (count($lines) <= 0){
+                return "NEW_VOTE";
+            }
+
+        }
+
+        //Get current date
+        $currentDate = time();
+
+        //Get the vote time
+        $var = array(
+            "id" => $this->idSite
+        );
+
+        $sql = "SELECT time FROM cms_votes_sites WHERE id = :id";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if($req->execute($var)) {
+            $res = $req->fetch();
+            $time = $res['time']; // Vote time
+
+        }
+
+        //Get the last vote
+        $var = array(
+          "id_user" => $this->idUser,
+          "id_site" => $this->idSite
+        );
+
+        $sql = "SELECT date FROM cms_votes_votes WHERE id_user = :id_user AND id_site = :id_site ORDER BY `cms_votes_votes`.`date` DESC LIMIT 1";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if($req->execute($var)) {
+            $res = $req->fetch();
+        }
+
+        $dateLatest = strtotime($res['date']); // Last vote date
+
+        $nextVoteDate = $currentDate + ($time * 60);
+
+        if ($dateLatest <= $nextVoteDate){
+            return true;
+        }
+
+     return false;
+
+    }
 
     //Return true if the player can vote
     public function check($url)
