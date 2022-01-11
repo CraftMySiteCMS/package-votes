@@ -5,13 +5,19 @@ $(document).ready(function () {
     function listener() {
         $('[name="btnVote"]').click(function () {
             let urlSite = $(this).val();
-            verify(urlSite);
 
-            window.open(urlSite, '_blank');
+            let token = document.getElementById("token").value;
+
+            if (token === "") {
+                console.log("Empty TOKEN, try again")
+            } else {
+                verify(urlSite, token);
+                window.open(urlSite, '_blank');
+            }
         })
     }
 
-    function verify(url) {
+    function verify(url, token) {
         console.log("Start verification for url " + url);
 
         //Request
@@ -21,24 +27,28 @@ $(document).ready(function () {
             async: true,
             dataType: "html",
             data: {
-                "url": url
+                "url": url,
+                "token": token
             },
             success: function (response) {
 
                 var jsonData = JSON.parse(response);
 
-                console.log("success, response: " + response);
+                console.log(response);
 
-                if (jsonData.response === "GOOD" || jsonData.response === "GOOD-NEW_VOTE" || jsonData.response === "ALREADY_VOTE"){
+                if (jsonData.response === "GOOD" || jsonData.response === "GOOD-NEW_VOTE" || jsonData.response === "ALREADY_VOTE") {
                     //Reset vote button
                     $('[name="btnVote"]').text("Voter").attr("disabled", false);
-                }
-
-                //Verif -> 3 sec
-                if (jsonData.response === "NOT_CONFIRMED"){
-                    setTimeout(function (){
-                       verify(url);
+                } else if (jsonData.response === "NOT_CONFIRMED") {//Verif -> 3 sec
+                    setTimeout(function () {
+                        verify(url);
                     }, 3000); // 3sec
+                } else if (jsonData.response === "ERROR-URL") {
+                    console.log("Your URL is empty, try again.")
+                } else if (jsonData.response === "ERROR-TOKEN") {
+                    console.log("Your TOKEN is empty, try again.")
+                } else if (jsonData.response === "ERROR-TOKEN-2") {
+                    console.log("Your token is broken, try again.")
                 }
 
             },

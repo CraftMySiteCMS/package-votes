@@ -1,4 +1,5 @@
 <?php
+
 namespace CMS\Controller\Votes;
 
 use CMS\Controller\coreController;
@@ -18,7 +19,6 @@ use CMS\Model\Votes\votesModel;
  * @author Teyir | CraftMySite <contact@craftmysite.fr>
  * @version 1.0
  */
-
 class votesController extends coreController
 {
 
@@ -32,7 +32,8 @@ class votesController extends coreController
 
     /* ///////////////////// CONFIG /////////////////////*/
 
-    public function votesConfig() {
+    public function votesConfig()
+    {
 
         $config = new configModel();
         $config->fetch();
@@ -41,7 +42,8 @@ class votesController extends coreController
         view('votes', 'config.admin', ["config" => $config], 'admin');
     }
 
-    public function votesConfigPost(){
+    public function votesConfigPost()
+    {
         //Keep this perm control just for the post function
         usersController::isAdminLogged();
 
@@ -68,7 +70,8 @@ class votesController extends coreController
 
     /* ///////////////////// SITES /////////////////////*/
 
-    public function addSiteAdmin() {
+    public function addSiteAdmin()
+    {
 
         $rewards = new rewardsModel();
         $rewards = $rewards->fetchAll();
@@ -76,7 +79,8 @@ class votesController extends coreController
         view('votes', 'add_site.admin', ["rewards" => $rewards], 'admin');
     }
 
-    public function addSiteAdminPost(){
+    public function addSiteAdminPost()
+    {
         usersController::isAdminLogged();
 
         $votes = new sitesModel();
@@ -98,7 +102,8 @@ class votesController extends coreController
     }
 
 
-    public function listSites() {
+    public function listSites()
+    {
 
         $votes = new sitesModel();
         $votesList = $votes->fetchAll();
@@ -110,7 +115,8 @@ class votesController extends coreController
         view('votes', 'list_sites.admin', ["votesList" => $votesList, "rewards" => $rewards], 'admin');
     }
 
-    public function votesSitesEdit(){
+    public function votesSitesEdit()
+    {
 
         $votes = new sitesModel();
         $votes->fetch($_POST['siteId']);
@@ -118,7 +124,8 @@ class votesController extends coreController
         view('votes', 'list_sites.admin', ["votes" => $votes], 'admin');
     }
 
-    public function votesSitesEditPost(){
+    public function votesSitesEditPost()
+    {
         usersController::isAdminLogged();
 
         $votes = new sitesModel();
@@ -138,7 +145,8 @@ class votesController extends coreController
 
     }
 
-    public function deleteSitePostAdmin($id){
+    public function deleteSitePostAdmin($id)
+    {
         usersController::isAdminLogged();
 
         $votes = new sitesModel();
@@ -155,16 +163,18 @@ class votesController extends coreController
 
     /* ///////////////////// REWARDS /////////////////////*/
 
-    public function votesRewards() {
+    public function votesRewards()
+    {
 
 
         view('votes', 'rewards.admin', [], 'admin');
     }
-    
+
 
     /* ///////////////////// TOP VOTES /////////////////////*/
 
-    public function topVotes() {
+    public function topVotes()
+    {
 
         //$votes = new topModel();
 
@@ -179,7 +189,8 @@ class votesController extends coreController
     /* ///////////////////// PUBLIC VOTE SECTION ////////////////////*/
     /* //////////////////////////////////////////////////////////////*/
 
-    public function votesPublic(){
+    public function votesPublic()
+    {
         //Default controllers (important)
         $core = new coreController();
         $menu = new menusController();
@@ -189,72 +200,76 @@ class votesController extends coreController
         $sites = new sitesModel();
         $sites = $sites->fetchAll();
 
+        $_SESSION['votes']['token'] = $vote->generateToken();
+
         //Include the public view file ("public/themes/$themePath/views/votes/main.view.php")
         view('votes', 'main', ["votes" => $vote, "sites" => $sites,
             "core" => $core, "menu" => $menu], 'public');
     }
 
-    public function votesPublicVerify(){
+    public function votesPublicVerify()
+    {
+
         /* Error section */
-        $errors = array();
-
-        if (empty(filter_input(INPUT_POST, "url"))){
-            $errors['name'] = "Url is null";
-        }
-
-
-        $vote = new votesModel();
-        $user = new usersModel();
+        if (empty(filter_input(INPUT_POST, "url"))) {
+            echo json_encode(array("response" => "ERROR-URL"));
+        } else if (empty(filter_input(INPUT_POST, "token"))) {
+            echo json_encode(array("response" => "ERROR-TOKEN"));
+        } else if (filter_input(INPUT_POST, "token") !== $_SESSION['votes']['token']) {
+            echo json_encode(array("response" => "ERROR-TOKEN-2"));
+        } else {
 
 
-        $url = filter_input(INPUT_POST, "url");
-
-        $site = $vote->getSite($url);
-        $vote->idUnique = $site['id_unique'];
-        $vote->idSite = $site['id'];
-
-        $vote->ipPlayer = "";
-        //$vote->getClientIp(); todo get l'ip de l'utilisateur
-
-        //Get user id
-        $user->fetch($_SESSION['cmsUserId']);
-        $vote->idUser = $user->userId;
+            $vote = new votesModel();
+            $user = new usersModel();
 
 
-        if ($vote->check($url) == true){
+            $url = filter_input(INPUT_POST, "url");
 
-            if ($vote->hasVoted() === "NEW_VOTE"){
+            $site = $vote->getSite($url);
+            $vote->idUnique = $site['id_unique'];
+            $vote->idSite = $site['id'];
 
-                //Store the vote
-                $vote->storeVote();
-                //Get reward
+            $vote->ipPlayer = "82.120.122.106";
+            //$vote->getClientIp(); todo get l'ip de l'utilisateur
 
-                echo json_encode(array("response" =>"GOOD-NEW_VOTE"));
-            }else{
-                //If the player has already vote
-                if ($vote->hasVoted()){
+            //Get user id
+            $user->fetch($_SESSION['cmsUserId']);
+            $vote->idUser = $user->userId;
 
-                    echo json_encode(array("response" =>"ALREADY_VOTE"));
 
-                }else{
+            if ($vote->check($url) == true) {
+
+                if ($vote->hasVoted() === "NEW_VOTE") {
+
                     //Store the vote
                     $vote->storeVote();
-
                     //Get reward
 
-                    echo json_encode(array("response" =>"GOOD"));
+                    echo json_encode(array("response" => "GOOD-NEW_VOTE"));
+                } else {
+                    //If the player has already vote
+                    if ($vote->hasVoted()) {
+
+                        echo json_encode(array("response" => "ALREADY_VOTE"));
+
+                    } else {
+                        //Store the vote
+                        $vote->storeVote();
+
+                        //Get reward
+
+                        echo json_encode(array("response" => "GOOD"));
+                    }
                 }
+
+            } else {//retry
+                echo json_encode(array("response" => "NOT_CONFIRMED"));
             }
 
-        } else{//retry
-            echo json_encode(array("response" =>"NOT_CONFIRMED"));
         }
 
-
     }
-
-
-
 
 
 }
