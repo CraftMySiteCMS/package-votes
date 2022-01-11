@@ -230,7 +230,7 @@ class votesController extends coreController
             $vote->idUnique = $site['id_unique'];
             $vote->idSite = $site['id'];
 
-            $vote->ipPlayer = "82.120.122.106";
+            $vote->ipPlayer = "";
             //$vote->getClientIp(); todo get l'ip de l'utilisateur
 
             //Get user id
