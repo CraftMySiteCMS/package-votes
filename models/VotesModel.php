@@ -119,17 +119,19 @@ class votesModel extends manager{
             $res = $req->fetch();
         }
 
+        //Creating the dates
         $dateLatest = strtotime($res['date']); // Last vote date
+        $nextVoteDate = $dateLatest + ($time * 60);
 
-        $nextVoteDate = $currentDate + ($time * 60);
+        //Converting the dates
+        $dateLatest = date("Y-m-d h:i:s", $dateLatest);
+        $nextVoteDate = date("Y-m-d h:i:s", $nextVoteDate);
+        $currentDate = date("Y-m-d h:i:s", $currentDate);
 
-        /*
-         * Soucis de vérification:
-         * Quand une personne vote elle passe direct en already vote et non en "good".
-         */
-        if ($dateLatest >= $nextVoteDate ){
-            //$this->storeVote();
-            return "GOOD - " . $dateLatest . " - " . $nextVoteDate;
+        //Check if the player has already vote or not
+        if ($currentDate >= $nextVoteDate || $currentDate === $dateLatest){
+            $this->storeVote();
+            return "GOOD";
         } else{
             return "ALREADY_VOTE";
         }
