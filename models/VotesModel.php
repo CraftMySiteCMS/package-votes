@@ -123,15 +123,22 @@ class votesModel extends manager{
 
         $nextVoteDate = $currentDate + ($time * 60);
 
-        if ($dateLatest <= $nextVoteDate){
-            return true;
+        /*
+         * Soucis de vérification:
+         * Quand une personne vote elle passe direct en already vote et non en "good".
+         */
+        if ($dateLatest >= $nextVoteDate ){
+            //$this->storeVote();
+            return "GOOD - " . $dateLatest . " - " . $nextVoteDate;
+        } else{
+            return "ALREADY_VOTE";
         }
 
-     return false;
 
     }
 
-    function generateToken() {
+    function generateToken(): string
+    {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';

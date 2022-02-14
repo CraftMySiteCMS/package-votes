@@ -10,6 +10,7 @@ use CMS\Model\votes\sitesModel;
 use CMS\Model\votes\configModel;
 use CMS\Model\votes\rewardsModel;
 use CMS\Model\users\usersModel;
+use CMS\Model\Votes\statsModel;
 use CMS\Model\Votes\votesModel;
 
 
@@ -171,16 +172,26 @@ class votesController extends coreController
     }
 
 
-    /* ///////////////////// TOP VOTES /////////////////////*/
+    /* ///////////////////// STATS /////////////////////*/
 
-    public function topVotes()
+    public function statsVotes()
     {
 
-        //$votes = new topModel();
+        $stats = new statsModel();
 
-        //Show top votes
+        $all = $stats->statsVotes("all");
+        $month = $stats->statsVotes("month");
+        $week = $stats->statsVotes("week");
+        $day = $stats->statsVotes("day");
 
-        view('votes', 'top.admin', [], 'admin');
+        $sites = new sitesModel();
+        $listSites = $sites->fetchAll();
+
+        $numberOfSites = $stats->getNumberOfSites();
+
+
+        view('votes', 'stats.admin', ["stats" => $stats, "all" => $all, "month" => $month, "week" => $week, "day" => $day,
+            "listSites" => $listSites, "numberOfSites" => $numberOfSites], 'admin');
     }
 
 
@@ -213,10 +224,6 @@ class votesController extends coreController
         /* Error section */
         if (empty(filter_input(INPUT_POST, "url"))) {
             echo json_encode(array("response" => "ERROR-URL"));
-        } else if (empty(filter_input(INPUT_POST, "token"))) {
-            echo json_encode(array("response" => "ERROR-TOKEN"));
-        } else if (filter_input(INPUT_POST, "token") !== $_SESSION['votes']['token']) {
-            echo json_encode(array("response" => "ERROR-TOKEN-2"));
         } else {
 
 
@@ -238,7 +245,7 @@ class votesController extends coreController
             $vote->idUser = $user->userId;
 
 
-            if ($vote->check($url) == true) {
+            if ($vote->check($url) === true) {
 
                 if ($vote->hasVoted() === "NEW_VOTE") {
 
@@ -248,18 +255,22 @@ class votesController extends coreController
 
                     echo json_encode(array("response" => "GOOD-NEW_VOTE"));
                 } else {
-                    //If the player has already vote
-                    if ($vote->hasVoted()) {
-
-                        echo json_encode(array("response" => "ALREADY_VOTE"));
-
-                    } else {
+                    //If the player can get the reward
+                    if ($vote->hasVoted() === "GOOD") {
                         //Store the vote
-                        $vote->storeVote();
+                        //$vote->storeVote();
 
                         //Get reward
 
                         echo json_encode(array("response" => "GOOD"));
+
+                    //If the player has already vote
+                    } else if ($vote->hasVoted() === "ALREADY_VOTE") {
+
+                        echo json_encode(array("response" => "ALREADY_VOTE"));
+
+                    } else{
+                        echo json_encode(array("response" => $vote->hasVoted()));
                     }
                 }
 

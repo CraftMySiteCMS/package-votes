@@ -1,6 +1,6 @@
 <?php
 
-namespace CMS\Model\Votes ;
+namespace CMS\Model\Votes;
 
 use CMS\Model\manager;
 
@@ -13,10 +13,8 @@ use stdClass;
  * @author Teyir | CraftMySite <contact@craftmysite.fr>
  * @version 1.0
  */
-
-
-
-class configModel extends manager {
+class configModel extends manager
+{
     //Config
     public int $topShow;
     public int $reset;
@@ -24,16 +22,16 @@ class configModel extends manager {
     public ?string $autoTopReward;
 
 
-
     //Get the config
-    public function fetch(){
+    public function fetch(): array
+    {
 
         $sql = "SELECT * FROM cms_votes_config LIMIT 1";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
-        if($req->execute()) {
+        if ($req->execute()) {
             $result = $req->fetch();
             foreach ($result as $key => $property) {
 
@@ -49,10 +47,13 @@ class configModel extends manager {
                 }
             }
         }
+
+        return [];
     }
 
     //Update the config
-    public function update(){
+    public function update(): void
+    {
         $info = array(
             "top_show" => $this->topShow,
             "reset" => $this->reset,

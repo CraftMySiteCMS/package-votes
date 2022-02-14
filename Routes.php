@@ -13,7 +13,7 @@ $router->scope('/cms-admin/', function($router) {
     $router->get('votes/config', 'votes#votesConfig');
     $router->post('votes/config', 'votes#votesConfigPost');
 
-    $router->get('votes/top/', 'votes#topVotes');
+    $router->get('votes/stats/', 'votes#statsVotes');
 
     $router->get('votes/site/list', 'votes#listSites');
     $router->post('votes/site/list', 'votes#votesSitesEditPost');

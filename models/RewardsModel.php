@@ -1,5 +1,6 @@
 <?php
-namespace CMS\Model\Votes ;
+
+namespace CMS\Model\Votes;
 
 use CMS\Model\manager;
 
@@ -12,10 +13,8 @@ use stdClass;
  * @author Teyir | CraftMySite <contact@craftmysite.fr>
  * @version 1.0
  */
-
-
-
-class rewardsModel extends manager {
+class rewardsModel extends manager
+{
 
     public int $rewardsId;
     public string $rewardsTitles;
@@ -27,7 +26,7 @@ class rewardsModel extends manager {
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
-        if($req->execute()) {
+        if ($req->execute()) {
             return $req->fetchAll();
         }
 
@@ -35,7 +34,7 @@ class rewardsModel extends manager {
     }
 
     //Get a reward
-    public function fetch($id)
+    public function fetch($id): array
     {
         $var = array(
             "rewards_id" => $id
@@ -54,6 +53,8 @@ class rewardsModel extends manager {
                 }
             }
         }
+
+        return [];
     }
 
 }

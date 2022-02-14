@@ -6,18 +6,21 @@ $(document).ready(function () {
         $('[name="btnVote"]').click(function () {
             let urlSite = $(this).val();
 
-            let token = document.getElementById("token").value;
+            /*let token = document.getElementById("token").value;
 
             if (token === "") {
                 console.log("Empty TOKEN, try again")
             } else {
                 verify(urlSite, token);
                 window.open(urlSite, '_blank');
-            }
+            }*/
+
+            verify(urlSite);
+            window.open(urlSite, '_blank');
         })
     }
 
-    function verify(url, token) {
+    function verify(url) {
         console.log("Start verification for url " + url);
 
         //Request
@@ -27,8 +30,7 @@ $(document).ready(function () {
             async: true,
             dataType: "html",
             data: {
-                "url": url,
-                "token": token
+                "url": url
             },
             success: function (response) {
 
@@ -49,6 +51,8 @@ $(document).ready(function () {
                     console.log("Your TOKEN is empty, try again.")
                 } else if (jsonData.response === "ERROR-TOKEN-2") {
                     console.log("Your token is broken, try again.")
+                } else{
+                    console.log(jsonData.response)
                 }
 
             },

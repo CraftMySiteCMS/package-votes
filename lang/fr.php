@@ -2,7 +2,7 @@
 
 /* Panel d'administration */
 const VOTES_DASHBOARD_TITLE_CONFIG = "Votes - Configuration";
-const VOTES_DASHBOARD_TITLE_TOP = "Votes - Top voteurs";
+const VOTES_DASHBOARD_TITLE_STATS = "Votes -Stats de votes";
 const VOTES_DASHBOARD_TITLE_ADD = "Votes - Ajouter un site";
 const VOTES_DASHBOARD_TITLE_LISTE_SITES = "Votes - Liste des sites";
 const VOTES_DASHBOARD_DESC = "Gérez vos sites de votes / récompenses sur cette page";
@@ -54,3 +54,12 @@ const VOTES_TOAST_TITLE_WARNING = "Attention";
 const VOTES_TOAST_EDIT_SUCCESS = "Modification effectuée";
 const VOTES_TOAST_ADD_SUCCESS = "Ajouts effectué";
 const VOTES_TOAST_DELETE_SUCCESS = "Suppression effectuée";
+
+/* Liste des mois */
+const VOTES_MONTHS = ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Decembre"];
+
+/* Statistiques */
+const VOTES_DASHBOARD_STATS_TOTALS = "Votes totaux";
+const VOTES_DASHBOARD_STATS_MONTHS = "Votes du mois en cours";
+const VOTES_DASHBOARD_STATS_WEEK = "Votes de là semaine en cours";
+const VOTES_DASHBOARD_STATS_DAY = "Votes d'aujourd'hui";

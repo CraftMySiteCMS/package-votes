@@ -1,6 +1,6 @@
 <?php
 
-namespace CMS\Model\Votes ;
+namespace CMS\Model\Votes;
 
 use CMS\Model\manager;
 
@@ -13,9 +13,6 @@ use stdClass;
  * @author Teyir | CraftMySite <contact@craftmysite.fr>
  * @version 1.0
  */
-
-
-
 class sitesModel extends manager
 {
     //Sites
@@ -27,9 +24,8 @@ class sitesModel extends manager
     public int $siteId;
 
 
-
     //Add a new Website
-    public function addSite()
+    public function addSite(): void
     {
         $var = array(
             'title' => $this->title,
@@ -63,7 +59,7 @@ class sitesModel extends manager
 
 
     //Get a website
-    public function fetch($id)
+    public function fetch($id): array
     {
         $var = array(
             "id" => $id
@@ -90,10 +86,12 @@ class sitesModel extends manager
                 }
             }
         }
+
+        return [];
     }
 
     //Edit a website
-    public function update()
+    public function update(): void
     {
         $info = array(
             "id" => $this->siteId,
@@ -112,7 +110,7 @@ class sitesModel extends manager
     }
 
     //Delete a site
-    public function delete($id)
+    public function delete($id): void
     {
         $info = array(
             "id" => $id

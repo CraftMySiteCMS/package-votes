@@ -8,7 +8,7 @@
     "Ajouter un site": "votes/site/add",
     "Liste des sites": "votes/site/list",
     "Récompenses": "votes/rewards",
-    "Top voteurs": "votes/top/",
+    "Statistiques de votes": "votes/stats",
     "Muliplicateur de votes": "votes/boost/",
     "VoteShop": "votes/voteshop"
   },
