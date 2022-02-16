@@ -22,7 +22,7 @@ $scripts= '<script src="'.getenv("PATH_SUBFOLDER").'app/package/votes/views/ress
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><?= VOTES_DASHBOARD_LISTE_TITLE ?></h3>
+                            <h3 class="card-title"><?= VOTES_DASHBOARD_LISTE_SITE_TITLE ?></h3>
                         </div>
 
                         <div class="card-body">
@@ -49,7 +49,7 @@ $scripts= '<script src="'.getenv("PATH_SUBFOLDER").'app/package/votes/views/ress
                                                             <span class="input-group-text"><i class="fas fa-heading"></i></span>
                                                         </div>
                                                         <input type="text" name="title" class="form-control"
-                                                               placeholder="<?= VOTES_DASHBOARD_ADD_PLACEHOLDER_TITLE ?>"
+                                                               placeholder="<?= VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_TITLE ?>"
                                                                value="<?= $votes['title'] ?>"
                                                                required>
                                                     </div>
@@ -58,7 +58,7 @@ $scripts= '<script src="'.getenv("PATH_SUBFOLDER").'app/package/votes/views/ress
                                                             <span class="input-group-text"><i class="fas fa-hourglass-start"></i></span>
                                                         </div>
                                                         <input type="number" name="time" class="form-control"
-                                                               placeholder="<?= VOTES_DASHBOARD_ADD_PLACEHOLDER_TIME ?>"
+                                                               placeholder="<?= VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_TIME ?>"
                                                                value="<?= $votes['time'] ?>"
                                                                required>
                                                     </div>
@@ -67,7 +67,7 @@ $scripts= '<script src="'.getenv("PATH_SUBFOLDER").'app/package/votes/views/ress
                                                             <span class="input-group-text"><i class="fas fa-link"></i></span>
                                                         </div>
                                                         <input type="url" name="url" id="url" class="form-control"
-                                                               placeholder="<?= VOTES_DASHBOARD_ADD_PLACEHOLDER_URL ?>"
+                                                               placeholder="<?= VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_URL ?>"
                                                                value="<?= $votes['url'] ?>"
                                                                required>
                                                     </div>
@@ -76,17 +76,23 @@ $scripts= '<script src="'.getenv("PATH_SUBFOLDER").'app/package/votes/views/ress
                                                             <span class="input-group-text"><i class="fas fa-fingerprint"></i></span>
                                                         </div>
                                                         <input type="text" name="idUnique" id="idUnique" class="form-control"
-                                                               placeholder="<?= VOTES_DASHBOARD_ADD_PLACEHOLDER_ID_UNIQUE ?>"
+                                                               placeholder="<?= VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_ID_UNIQUE ?>"
                                                                value="<?= $votes['id_unique'] ?>"
                                                                required>
                                                         <div class="input-group-prepend">
-                                                            <button type="button" onclick="testId();" class="btn btn-success"><?= VOTES_DASHBOARD_ADD_BTN_TESTID ?></button>
+                                                            <button type="button" onclick="testId();" class="btn btn-success"><?= VOTES_DASHBOARD_ADD_SITE_BTN_TESTID ?></button>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label><?= VOTES_DASHBOARD_ADD_PLACEHOLDER_REWARDS ?></label>
+                                                        <label><?= VOTES_DASHBOARD_ADD_SITE_PLACEHOLDER_REWARDS ?></label>
                                                         <select name="reward" class="form-control"  required>
-                                                            <?php foreach ($rewards as $reward) : ?>
+                                                            <!-- If the reward was delete we set a default placeholder -->
+                                                            <?php if ($votes['rewards_id'] === NULL):?>
+                                                                <option selected><?=VOTES_DASHBOARD_LIST_NOREWARD?></option>
+                                                            <?php endif; ?>
+
+                                                            <!-- Get all rewards -->
+                                                            <?php foreach ($rewards as $reward) :?>
                                                                 <option value="<?= $reward['rewards_id'] ?>" <?= ($votes['rewards_id'] === $reward['rewards_id'] ? "selected" : "") ?>><?= $reward['title'] ?></option>
                                                             <?php endforeach; ?>
                                                         </select>
@@ -115,7 +121,7 @@ $scripts= '<script src="'.getenv("PATH_SUBFOLDER").'app/package/votes/views/ress
                                                                 </div>
                                                                 <!-- Button for delete the website -->
                                                                 <div class="modal-body">
-                                                                   <?= VOTES_DASHBOARD_LIST_DELSITE_MODAL_BODY ?>
+                                                                    <?= VOTES_DASHBOARD_LIST_DELSITE_MODAL_BODY ?>
                                                                 </div>
 
                                                                 <div class="modal-footer">

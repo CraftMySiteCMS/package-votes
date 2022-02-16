@@ -26,8 +26,15 @@ $router->scope('/cms-admin/', function($router) {
     $router->post('votes/site/add/', 'votes#addSiteAdminPost');
 
     $router->get('votes/rewards', 'votes#votesRewards');
+    $router->post('votes/rewards', 'votes#editRewardPost');
 
+    $router->post('votes/rewards/get', 'votes#getReward');
 
+    $router->post('votes/rewards/add', 'votes#addRewardPost');
+
+    $router->get('votes/rewards/delete/:id', function($id) {
+        (new votesController)->deleteRewardPostAdmin($id);
+    })->with('id', '[0-9]+');
 });
 
 /* PUBLIC PAGE */

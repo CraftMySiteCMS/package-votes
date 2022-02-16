@@ -34,9 +34,10 @@ $(document).ready(function () {
             },
             success: function (response) {
 
+                console.log(response);
+
                 var jsonData = JSON.parse(response);
 
-                console.log(response);
 
                 if (jsonData.response === "GOOD" || jsonData.response === "GOOD-NEW_VOTE" || jsonData.response === "ALREADY_VOTE") {
                     //Reset vote button

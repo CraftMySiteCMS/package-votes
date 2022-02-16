@@ -5,11 +5,11 @@ namespace CMS\Controller\Votes;
 use CMS\Controller\coreController;
 use CMS\Controller\Menus\menusController;
 use CMS\Controller\users\usersController;
+use CMS\Model\users\usersModel;
 use CMS\Model\Votes\checkVotesModel;
-use CMS\Model\votes\sitesModel;
 use CMS\Model\votes\configModel;
 use CMS\Model\votes\rewardsModel;
-use CMS\Model\users\usersModel;
+use CMS\Model\votes\sitesModel;
 use CMS\Model\Votes\statsModel;
 use CMS\Model\Votes\votesModel;
 
@@ -167,10 +167,126 @@ class votesController extends coreController
     public function votesRewards()
     {
 
+        $rewards = new rewardsModel();
+        $rewards = $rewards->fetchAll();
 
-        view('votes', 'rewards.admin', [], 'admin');
+
+        view('votes', 'rewards.admin', ["rewards" => $rewards], 'admin');
     }
 
+    public function addRewardPost()
+    {
+        usersController::isAdminLogged();
+
+        $reward = new rewardsModel();
+
+        $rewardType = filter_input(INPUT_POST, "reward_type");
+        $reward->title = filter_input(INPUT_POST, "title");
+
+        //Define the reward action
+        switch ($rewardType) {
+            case "votepoints":
+                $reward->action = json_encode(array("type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")));
+                break;
+
+            case "votepoints-random":
+                $reward->action = json_encode(array("type" => "votepoints-random",
+                    "amount" => array(
+                        "min" => filter_input(INPUT_POST, "amount-min"),
+                        "max" => filter_input(INPUT_POST, "amount-max"))));
+                break;
+
+            case "none"://Error, redirect
+                $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_ERROR;
+                $_SESSION['toaster'][0]['type'] = "bg-danger";
+                $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ERROR_INTERNAL;
+                header("location: ../rewards");
+                break;
+        }
+
+        //Add reward
+        $reward->addReward();
+
+        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
+        $_SESSION['toaster'][0]['type'] = "bg-success";
+        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ADD_SUCCESS;
+
+        header("location: ../rewards");
+
+    }
+
+    public function deleteRewardPostAdmin($id)
+    {
+        usersController::isAdminLogged();
+
+        $reward = new rewardsModel();
+        $reward->rewardsId = $id;
+        $reward->delete($id);
+
+        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
+        $_SESSION['toaster'][0]['type'] = "bg-success";
+        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_DELETE_SUCCESS;
+
+        header('location: ../rewards');
+    }
+
+    public function editRewardPost()
+    {
+        usersController::isAdminLogged();
+
+        $reward = new rewardsModel();
+
+        $reward->rewardsId = filter_input(INPUT_POST, "reward_id");
+        $rewardType = filter_input(INPUT_POST, "reward_type");
+        $reward->title = filter_input(INPUT_POST, "title");
+
+
+        //Define the reward action
+        switch ($rewardType) {
+            case "votepoints":
+                $reward->action = json_encode(array("type" => "votepoints", "amount" => filter_input(INPUT_POST, "amount")));
+                break;
+
+            case "votepoints-random":
+                $reward->action = json_encode(array("type" => "votepoints-random",
+                    "amount" => array(
+                        "min" => filter_input(INPUT_POST, "amount-min"),
+                        "max" => filter_input(INPUT_POST, "amount-max"))));
+                break;
+
+            case "none"://Error, redirect
+                $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_ERROR;
+                $_SESSION['toaster'][0]['type'] = "bg-danger";
+                $_SESSION['toaster'][0]['body'] = VOTES_TOAST_ERROR_INTERNAL;
+                header("location: ../votes/rewards");
+                break;
+        }
+
+
+        $reward->update();
+
+        $_SESSION['toaster'][0]['title'] = VOTES_TOAST_TITLE_SUCCESS;
+        $_SESSION['toaster'][0]['type'] = "bg-success";
+        $_SESSION['toaster'][0]['body'] = VOTES_TOAST_EDIT_SUCCESS;
+
+        header('location: rewards');
+
+    }
+
+    //Return the reward with a specific ID
+    public function getReward(){
+        /* Error section */
+        if (empty(filter_input(INPUT_POST, "id"))) {
+            echo json_encode(array("response" => "ERROR-EMPTY_ID"));
+        } else {
+            $reward = new rewardsModel();
+
+            $reward->fetch(filter_input(INPUT_POST, "id"));
+
+            echo $reward->action;
+        }
+
+    }
 
     /* ///////////////////// STATS /////////////////////*/
 
@@ -229,6 +345,7 @@ class votesController extends coreController
 
             $vote = new votesModel();
             $user = new usersModel();
+            $reward = new rewardsModel();
 
 
             $url = filter_input(INPUT_POST, "url");
@@ -237,12 +354,15 @@ class votesController extends coreController
             $vote->idUnique = $site['id_unique'];
             $vote->idSite = $site['id'];
 
+            $reward->idSite = $vote->idSite;
+
             $vote->ipPlayer = "";
             //$vote->getClientIp(); todo get l'ip de l'utilisateur
 
             //Get user id
             $user->fetch($_SESSION['cmsUserId']);
             $vote->idUser = $user->userId;
+            $reward->userId = $vote->idUser;
 
 
             if ($vote->check($url) === true) {
@@ -251,25 +371,28 @@ class votesController extends coreController
 
                     //Store the vote
                     $vote->storeVote();
+
                     //Get reward
+                    $reward->selectReward();
 
                     echo json_encode(array("response" => "GOOD-NEW_VOTE"));
                 } else {
                     //If the player can get the reward
                     if ($vote->hasVoted() === "GOOD") {
                         //Store the vote
-                        //$vote->storeVote();
+                        $vote->storeVote();
 
                         //Get reward
+                        $reward->selectReward();
 
                         echo json_encode(array("response" => "GOOD"));
 
-                    //If the player has already vote
+                        //If the player has already vote
                     } else if ($vote->hasVoted() === "ALREADY_VOTE") {
 
                         echo json_encode(array("response" => "ALREADY_VOTE"));
 
-                    } else{
+                    } else {
                         echo json_encode(array("response" => $vote->hasVoted()));
                     }
                 }
