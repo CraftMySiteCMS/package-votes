@@ -3,7 +3,7 @@
 use CMS\Controller\votes\votesController;
 use CMS\Router\Router;
 
-require_once('Lang/'.getenv("LOCALE").'.php');
+require_once('lang/'.getenv("LOCALE").'.php');
 
 /** @var $router Router Main router */
 
