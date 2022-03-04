@@ -191,6 +191,11 @@ class votesModel extends manager{
             if ($result == 1) {
                 return true;
             }
+        } elseif (strpos($url, 'serveur-minecraft.com')){
+            $result = @file_get_contents("https://serveur-minecraft.com/api/1/vote/$this->idUnique/$this->ipPlayer");
+            if ($result == 0) {
+                return true;
+            }
         }
 
     }
