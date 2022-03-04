@@ -186,6 +186,11 @@ class votesModel extends manager{
             if ($result === "true") {
                 return true;
             }
+        } elseif (strpos($url, 'liste-serveurs-minecraft.org')){
+            $result = @file_get_contents("https://api.liste-serveurs-minecraft.org/vote/vote_verification.php?server_id=$this->idUnique&ip=$this->ipPlayer");
+            if ($result == 1) {
+                return true;
+            }
         }
 
     }
