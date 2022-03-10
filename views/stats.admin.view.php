@@ -176,6 +176,114 @@ ob_start();
 
     </div>
 
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Top voteurs mois en cours</h3>
+            </div>
+            <div class="card-body">
+                <table id="users_table" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Pseudo</th>
+                        <th>Votes</th>
+                        <th>E-mail</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php /** @var statsModel[] $actualTop */
+                    foreach ($actualTop as $player) : ?>
+                        <tr>
+                            <td><?=$player['pseudo']?></td>
+                            <td><?=$player['votes']?></td>
+                            <td><?=$player['email']?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Pseudo</th>
+                        <th>Votes</th>
+                        <th>E-mail</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Top voteurs totaux</h3>
+            </div>
+            <div class="card-body">
+                <table id="users_table" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Pseudo</th>
+                        <th>Votes</th>
+                        <th>E-mail</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php /** @var statsModel[] $globalTop */
+                    foreach ($globalTop as $player) : ?>
+                        <tr>
+                            <td><?=$player['pseudo']?></td>
+                            <td><?=$player['votes']?></td>
+                            <td><?=$player['email']?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Pseudo</th>
+                        <th>Votes</th>
+                        <th>E-mail</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Classement du mois précédent</h3>
+            </div>
+            <div class="card-body">
+                <table id="users_table" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Pseudo</th>
+                        <th>Votes</th>
+                        <th>E-mail</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php /** @var statsModel[] $previousTop */
+                    foreach ($previousTop as $player) : ?>
+                        <tr>
+                            <td><?=$player['pseudo']?></td>
+                            <td><?=$player['votes']?></td>
+                            <td><?=$player['email']?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Pseudo</th>
+                        <th>Votes</th>
+                        <th>E-mail</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <pre>
         <strong>Statistiques prévus:</strong>
 
