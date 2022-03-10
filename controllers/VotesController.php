@@ -304,10 +304,15 @@ class votesController extends coreController
         $listSites = $sites->fetchAll();
 
         $numberOfSites = $stats->getNumberOfSites();
+        
+        $actualTop = $stats->getActualTopNoLimit();
+        $globalTop = $stats->getGlobalTopNoLimit();
+        $previousTop = $stats->getPreviousMonthTop();
 
 
         view('votes', 'stats.admin', ["stats" => $stats, "all" => $all, "month" => $month, "week" => $week, "day" => $day,
-            "listSites" => $listSites, "numberOfSites" => $numberOfSites], 'admin');
+            "listSites" => $listSites, "numberOfSites" => $numberOfSites, "actualTop" => $actualTop,
+            "globalTop" => $globalTop, "previousTop" => $previousTop], 'admin');;
     }
 
 
