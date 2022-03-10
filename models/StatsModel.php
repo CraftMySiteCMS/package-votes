@@ -153,4 +153,104 @@ class statsModel extends manager
         return "";
     }
 
+    
+    //Public function for the top votes (actual month)
+
+    /**
+     * @return array (votes, pseudo)
+     */
+    public function getActualTop(): array
+    {
+
+        $sql = "SELECT COUNT(cms_votes_votes.id) as votes, cms_users.user_pseudo as pseudo FROM cms_votes_votes 
+                    JOIN cms_users ON cms_users.user_id = cms_votes_votes.id_user 
+                    WHERE MONTH(cms_votes_votes.date) = MONTH(CURRENT_DATE()) GROUP BY cms_users.user_pseudo 
+                    ORDER BY COUNT(cms_votes_votes.id) DESC LIMIT 10";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if ($req->execute()) {
+            return $req->fetchAll();
+        }
+
+        return [];
+    }
+
+    //Public function for the top votes (global)
+
+    /**
+     * @return array (votes, pseudo)
+     */
+    public function getGlobalTop(): array
+    {
+
+        $sql = "SELECT COUNT(cms_votes_votes.id) as votes, cms_users.user_pseudo as pseudo FROM cms_votes_votes 
+                    JOIN cms_users ON cms_users.user_id = cms_votes_votes.id_user GROUP BY cms_users.user_pseudo 
+                    ORDER BY COUNT(cms_votes_votes.id) DESC LIMIT 10";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if ($req->execute()) {
+            return $req->fetchAll();
+        }
+
+        return [];
+    }
+
+
+    public function getActualTopNoLimit(): array
+    {
+
+        $sql = "SELECT COUNT(cms_votes_votes.id) as votes, cms_users.user_pseudo as pseudo, cms_users.user_email as email FROM cms_votes_votes 
+                    JOIN cms_users ON cms_users.user_id = cms_votes_votes.id_user 
+                    WHERE MONTH(cms_votes_votes.date) = MONTH(CURRENT_DATE()) GROUP BY cms_users.user_pseudo 
+                    ORDER BY COUNT(cms_votes_votes.id) DESC";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if ($req->execute()) {
+            return $req->fetchAll();
+        }
+
+        return [];
+    }
+
+    public function getGlobalTopNoLimit(): array
+    {
+
+        $sql = "SELECT COUNT(cms_votes_votes.id) as votes, cms_users.user_pseudo as pseudo, cms_users.user_email as email FROM cms_votes_votes 
+                    JOIN cms_users ON cms_users.user_id = cms_votes_votes.id_user GROUP BY cms_users.user_pseudo 
+                    ORDER BY COUNT(cms_votes_votes.id) DESC";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if ($req->execute()) {
+            return $req->fetchAll();
+        }
+
+        return [];
+    }
+
+    public function getPreviousMonthTop(): array
+    {
+
+        $sql = "SELECT COUNT(cms_votes_votes.id) as votes, cms_users.user_pseudo as pseudo, cms_users.user_email as email FROM cms_votes_votes 
+                    JOIN cms_users ON cms_users.user_id = cms_votes_votes.id_user 
+                    WHERE MONTH(cms_votes_votes.date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) GROUP BY cms_users.user_pseudo 
+                    ORDER BY COUNT(cms_votes_votes.id) DESC";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if ($req->execute()) {
+            return $req->fetchAll();
+        }
+
+        return [];
+    }
+
 }
