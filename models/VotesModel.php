@@ -183,7 +183,7 @@ class votesModel extends manager{
             }
         } elseif (strpos($url, 'serveursminecraft.org')){
             $result = @file_get_contents("https://www.serveursminecraft.org/sm_api/peutVoter.php?id=$this->idUnique&ip=$this->ipPlayer");
-            if ($result === "true") {
+            if ($result !== "true") {
                 return true;
             }
         } elseif (strpos($url, 'liste-serveurs-minecraft.org')){
